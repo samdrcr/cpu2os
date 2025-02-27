@@ -113,6 +113,28 @@ void IF() {
 }
 
 // DOWHILE = do STMT while (E);
+void DOWHILE() {
+  int doBegin = nextLabel();  
+  int doEnd = nextLabel();   
+
+  emit("(L%d)\n", doBegin);
+  
+  skip("do");  
+  STMT();  
+
+  skip("while");  
+  skip("(");  
+  int e = E(); 
+
+  emit("if not T%d goto L%d\n", e, doEnd);
+
+  skip(")");  
+  
+  emit("goto L%d\n", doBegin);
+  
+  emit("(L%d)\n", doEnd);
+}
+
 
 // STMT = WHILE | BLOCK | IF | DOWHILE | ASSIGN
 void STMT() {
